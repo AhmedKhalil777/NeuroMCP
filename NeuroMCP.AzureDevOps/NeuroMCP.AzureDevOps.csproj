@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>true</IsPackable>
+    
+    <!-- Tool configuration -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>neuromcp-azdevops</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    
+    <!-- Package metadata -->
+    <PackageId>NeuroMCP.AzureDevOps</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Ahmed Khalil</Authors>
+    <Description>NeuroMCP Azure DevOps Tool for interacting with Azure DevOps APIs</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/AhmedKhalil777/NeuroMCP/main/NeuroMCP.AzureDevOps/logo.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/AhmedKhalil777/NeuroMCP</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>neuromcp;mcp;azure;devops;tool;ai;azuredevops;azure-devops</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.0" />
+    <PackageReference Include="ModelContextProtocol" Version="0.2.0-preview.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+    <!-- Azure DevOps specific packages -->
+    <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.205.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.205.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Services.InteractiveClient" Version="16.205.1" />
+    <PackageReference Include="Azure.Identity" Version="1.10.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="logo.png" Pack="true" PackagePath="\" />
+    <None Include="Scripts\*.ps1" Pack="true" PackagePath="tools" />
+    <None Include="Scripts\*.sh" Pack="true" PackagePath="tools" />
+    <None Include="Scripts\*.bat" Pack="true" PackagePath="tools" />
+  </ItemGroup>
+
+</Project> 

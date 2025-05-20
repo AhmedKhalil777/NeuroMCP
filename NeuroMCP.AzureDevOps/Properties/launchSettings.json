@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "NeuroMCP.AzureDevOps": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "NEUROMCP_AZDEVOPS_ORG_URL": "",
+        "NEUROMCP_AZDEVOPS_PROJECT": "",
+        "NEUROMCP_AZDEVOPS_PAT": ""
+      },
+      "applicationUrl": "http://localhost:5300",
+      "dotnetRunMessages": true
+    }
+  }
+} 
