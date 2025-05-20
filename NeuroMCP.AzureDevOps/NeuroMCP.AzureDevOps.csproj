@@ -47,5 +47,10 @@
     <None Include="Scripts\*.sh" Pack="true" PackagePath="tools" />
     <None Include="Scripts\*.bat" Pack="true" PackagePath="tools" />
   </ItemGroup>
+  
+  <!-- Reference to core MCP types from the SqlServer project -->
+  <ItemGroup>
+    <ProjectReference Include="..\NeuroMCP.SqlServer\NeuroMCP.SqlServer.csproj" />
+  </ItemGroup>
 
 </Project> 
