@@ -1,77 +1,67 @@
-using System.Net.Http.Headers;
 using Azure.Core;
+using Azure.Identity;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace NeuroMCP.AzureDevOps.Services;
-
-/// <summary>
-/// Custom credential implementation that uses Azure.Identity for authentication with Azure DevOps
-/// </summary>
-public class VssAzureADCredential : VssCredentials
+namespace NeuroMCP.AzureDevOps.Services
 {
-    private readonly TokenCredential _credential;
-
-    public VssAzureADCredential(TokenCredential credential)
+    /// <summary>
+    /// VSS credential implementation using Azure AD authentication
+    /// </summary>
+    public class VssAzureADCredential : VssCredentials
     {
-        _credential = credential;
-    }
+        private readonly TokenCredential _tokenCredential;
+        private readonly string[] _scopes;
 
-    public override bool IsAuthenticationChallenge(HttpResponseMessage response)
-    {
-        return response.StatusCode == System.Net.HttpStatusCode.Unauthorized;
-    }
-
-    public override async Task<HttpResponseMessage> HandleAuthenticationChallenge(HttpResponseMessage response)
-    {
-        var request = response.RequestMessage;
-
-        // Add Bearer token from Azure Identity
-        var tokenRequestContext = new TokenRequestContext(new[] { "499b84ac-1321-427f-aa17-267ca6975798/.default" }); // Azure DevOps scope
-        var token = await _credential.GetTokenAsync(tokenRequestContext, CancellationToken.None);
-
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
-
-        // Clone the request (because the original request's content might have been disposed)
-        var clonedRequest = await CloneHttpRequestMessageAsync(request);
-
-        using var client = new HttpClient();
-        return await client.SendAsync(clonedRequest);
-    }
-
-    private static async Task<HttpRequestMessage> CloneHttpRequestMessageAsync(HttpRequestMessage request)
-    {
-        var clone = new HttpRequestMessage(request.Method, request.RequestUri)
+        public VssAzureADCredential(TokenCredential tokenCredential, string[] scopes)
         {
-            Content = request.Content,
-            Version = request.Version
-        };
-
-        foreach (var header in request.Headers)
-        {
-            clone.Headers.TryAddWithoutValidation(header.Key, header.Value);
+            _tokenCredential = tokenCredential ?? throw new ArgumentNullException(nameof(tokenCredential));
+            _scopes = scopes ?? throw new ArgumentNullException(nameof(scopes));
         }
 
-        // Manually copy the content if needed
-        if (request.Content != null)
+        // These methods should not be implemented as overrides if they don't exist in the base class
+        public bool IsAuthenticationChallenge(HttpResponseMessage response)
         {
-            var ms = new MemoryStream();
-            await request.Content.CopyToAsync(ms);
-            ms.Position = 0;
+            return response.StatusCode == System.Net.HttpStatusCode.Unauthorized;
+        }
 
-            clone.Content = new StreamContent(ms);
-
-            if (request.Content.Headers != null)
+        public async Task<bool> HandleAuthenticationChallenge(HttpResponseMessage response)
+        {
+            if (!IsAuthenticationChallenge(response))
             {
-                foreach (var header in request.Content.Headers)
-                {
-                    clone.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
-                }
+                return false;
             }
+
+            // Get a new access token
+            var token = await GetTokenAsync();
+            var request = response.RequestMessage;
+
+            if (request != null)
+            {
+                // Update the authorization header
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                return true;
+            }
+
+            return false;
         }
 
-        return clone;
-    }
+        private async Task<string> GetTokenAsync(CancellationToken cancellationToken = default)
+        {
+            var accessToken = await _tokenCredential.GetTokenAsync(
+                new TokenRequestContext(_scopes),
+                cancellationToken);
 
-    public override VssCredentialsType CredentialType => VssCredentialsType.Oauth;
+            return accessToken.Token;
+        }
+
+        // Use property instead of override if CredentialType is not in the base class
+        public string CredentialType => "AzureAD";
+    }
 }

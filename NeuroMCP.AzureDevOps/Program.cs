@@ -1,10 +1,14 @@
 using System.CommandLine;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using ModelContextProtocol.Server;
 using ModelContextProtocol.Services;
+using NeuroMCP.AzureDevOps.Models;
 using NeuroMCP.AzureDevOps.Services;
 
 // Create command line options
@@ -68,7 +72,10 @@ async Task RunServer(string[] args, int port)
     // Configure services
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "NeuroMCP Azure DevOps API", Version = "v1" });
+    });
 
     // Add MCP Server
     builder.Services.AddMcpServer(options =>
@@ -93,7 +100,7 @@ async Task RunServer(string[] args, int port)
         app.UseSwaggerUI();
     }
 
-    app.UseRouting();
+    app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
 

@@ -2,6 +2,9 @@ using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Microsoft.VisualStudio.Services.WebApi;
+using NeuroMCP.AzureDevOps.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace NeuroMCP.AzureDevOps.Services;
 
@@ -69,4 +72,9 @@ public interface IAzureDevOpsService
     /// Update an existing work item
     /// </summary>
     Task<WorkItem> UpdateWorkItemAsync(int workItemId, IDictionary<string, object> fields, string? organizationId = null);
+
+    /// <summary>
+    /// Gets the authenticated user's details
+    /// </summary>
+    Task<AccountModel> GetMeAsync(string? organizationId = null);
 }

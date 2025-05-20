@@ -303,4 +303,20 @@ public class AzureDevOpsService : IAzureDevOpsService
         var workItem = await witClient.UpdateWorkItemAsync(patchDocument, workItemId);
         return workItem;
     }
+
+    /// <summary>
+    /// Get the current authenticated user's details
+    /// </summary>
+    public async Task<AccountModel> GetMeAsync(string? organizationId = null)
+    {
+        var client = await GetConnectionAsync(organizationId);
+        var identity = await client.GetConnectedAsync();
+
+        return new AccountModel
+        {
+            Id = identity.Id.ToString(),
+            DisplayName = identity.DisplayName,
+            Email = identity.Properties.ContainsKey("Account") ? identity.Properties["Account"].ToString() : null
+        };
+    }
 }
