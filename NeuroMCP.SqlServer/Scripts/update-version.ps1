@@ -4,7 +4,7 @@ param (
 )
 
 # Get the project file path
-$ProjectFile = Join-Path $PSScriptRoot "..\MCP.SqlServer.csproj"
+$ProjectFile = Join-Path $PSScriptRoot "..\NeuroMCP.SqlServer.csproj"
 
 # Check if file exists
 if (!(Test-Path $ProjectFile)) {

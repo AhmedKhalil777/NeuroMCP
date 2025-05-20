@@ -8,7 +8,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 VERSION=$1
-PROJECT_FILE="$(dirname "$0")/../MCP.SqlServer.csproj"
+PROJECT_FILE="$(dirname "$0")/../NeuroMCP.SqlServer.csproj"
 
 # Check if file exists
 if [ ! -f "$PROJECT_FILE" ]; then
