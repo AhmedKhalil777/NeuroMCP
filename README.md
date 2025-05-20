@@ -1,52 +1,69 @@
 # NeuroMCP
 
-A SQL Server tool built on the Model Context Protocol (MCP) framework, enabling seamless interactions with Microsoft SQL Server databases through an AI-friendly interface.
+A suite of tools built on the Model Context Protocol (MCP) framework, enabling seamless interactions with various services through an AI-friendly interface.
 
 ![NeuroMCP Logo](NeuroMCP.SqlServer/logo.png)
 
-## Features
+## Available Packages
+
+NeuroMCP currently includes the following packages:
+
+### NeuroMCP.SqlServer
+
+A tool for interacting with Microsoft SQL Server databases:
 
 - **SQL Query Execution**: Execute SQL queries against SQL Server databases
 - **Schema Inspection**: Explore database schema information
 - **Connection Management**: Safely store and manage database connections
-- **MCP Integration**: Full compliance with the Model Context Protocol for AI tools
-- **Cross-Platform Support**: Runs on Windows, Linux, and macOS
-- **Service Mode**: Can be installed as a Windows service or Linux daemon
+
+### NeuroMCP.AzureDevOps
+
+A tool for interacting with Azure DevOps APIs:
+
+- **Authentication**: Support for Personal Access Tokens (PAT), OAuth, and Azure AD (via Azure.Identity)
+- **Organizations & Projects**: List and manage Azure DevOps organizations and projects
+- **Repositories**: Access Git repositories, commits, pull requests
+- **Work Items**: Query, create, and update work items
+- **Pipelines**: Manage build and release pipelines
+- **Wikis**: Access and modify wiki content
 
 ## Installation
 
-### Via .NET Tool
+### SQL Server Package
 
 ```bash
 dotnet tool install --global NeuroMCP.SqlServer
 ```
 
-### Manual Installation
+### Azure DevOps Package
 
-1. Clone the repository
-2. Build the project
 ```bash
-dotnet build NeuroMCP.SqlServer -c Release
-```
-3. Install the tool locally
-```bash
-dotnet pack NeuroMCP.SqlServer -c Release --output ./nupkg
-dotnet tool install --global --add-source ./nupkg NeuroMCP.SqlServer
+dotnet tool install --global NeuroMCP.AzureDevOps
 ```
 
 ## Usage
 
-### CLI Mode
+### SQL Server Package
 
-Start the server in command-line mode:
+Start the SQL Server service:
 
 ```bash
 neuromcp-mssql --port 5200
 ```
 
-### Service Mode (Windows)
+### Azure DevOps Package
 
-Install and start as a Windows service:
+Start the Azure DevOps service:
+
+```bash
+neuromcp-azdevops --port 5300
+```
+
+## Service Mode (Windows)
+
+Both packages can be installed as Windows services:
+
+### SQL Server Service
 
 ```powershell
 # Install the service
@@ -56,30 +73,50 @@ neuromcp-mssql --install --service-name NeuroMCPSqlServer --port 5200
 Start-Service -Name NeuroMCPSqlServer
 ```
 
-### Using with PowerShell Script
-
-The included installation script provides additional options:
+### Azure DevOps Service
 
 ```powershell
-# Install the tool and run as a service
-.\NeuroMCP.SqlServer\Scripts\install-neuromcp.ps1 -Port 5200 -InstallService
+# Install the service
+neuromcp-azdevops --install --service-name NeuroMCPAzureDevOps --port 5300
 
-# Use a local package
-.\NeuroMCP.SqlServer\Scripts\install-neuromcp.ps1 -UseLocalPackage -Install
+# Start the service
+Start-Service -Name NeuroMCPAzureDevOps
 ```
 
-## API Endpoints
+## Configuration
 
-When running, the service provides the following endpoints:
+### SQL Server Configuration
 
-- **SQL Execution**: Execute queries against a SQL Server database
-- **Connection Test**: Test database connection strings
-- **Status Check**: Check the service status and version
+Use environment variables or connection strings to configure database connections.
+
+### Azure DevOps Configuration
+
+Configure Azure DevOps integration using:
+
+1. Environment variables:
+   - `NEUROMCP_AZDEVOPS_ORG_URL`: Default organization URL
+   - `NEUROMCP_AZDEVOPS_PROJECT`: Default project name
+   - `NEUROMCP_AZDEVOPS_PAT`: Personal Access Token for authentication
+
+2. Configuration file (mcp.json):
+```json
+{
+  "azureDevOps": {
+    "orgUrl": "https://dev.azure.com/your-org",
+    "defaultProject": "YourProject",
+    "authentication": {
+      "type": "pat",
+      "patToken": "your-pat-token"
+    }
+  }
+}
+```
 
 ## Requirements
 
 - .NET 8.0 or higher
-- Microsoft SQL Server (2016 or newer) or Azure SQL Database
+- Microsoft SQL Server (2016 or newer) or Azure SQL Database (for SQL Server package)
+- Azure DevOps account with appropriate permissions (for Azure DevOps package)
 
 ## License
 
