@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace NeuroMCP.AzureDevOps.Services.MediatR.Queries.GetProjectDetails;
@@ -129,4 +130,4 @@ public class WorkItemTypeReference
     /// Whether the work item type is disabled
     /// </summary>
     public bool IsDisabled { get; set; } = false;
-} 
+}

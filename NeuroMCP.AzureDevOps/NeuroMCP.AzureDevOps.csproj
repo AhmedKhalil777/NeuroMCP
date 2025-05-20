@@ -44,6 +44,8 @@
     <PackageReference Include="Microsoft.TeamFoundation.Core.WebApi" Version="16.205.1" />
     <PackageReference Include="Microsoft.TeamFoundation.WorkItemTracking.WebApi" Version="16.205.1" />
     <PackageReference Include="Microsoft.TeamFoundation.SourceControl.WebApi" Version="16.205.1" />
+    <PackageReference Include="Microsoft.TeamFoundation.ProcessConfiguration.WebApi" Version="16.205.1" />
+    <PackageReference Include="Microsoft.TeamFoundation.Work.WebApi" Version="16.205.1" />
     <PackageReference Include="Azure.Identity" Version="1.11.4" />
   </ItemGroup>
 
@@ -53,11 +55,6 @@
     <None Include="Scripts\*.ps1" Pack="true" PackagePath="tools" />
     <None Include="Scripts\*.sh" Pack="true" PackagePath="tools" />
     <None Include="Scripts\*.bat" Pack="true" PackagePath="tools" />
-  </ItemGroup>
-  
-  <!-- Reference to core MCP types from the SqlServer project -->
-  <ItemGroup>
-    <ProjectReference Include="..\NeuroMCP.SqlServer\NeuroMCP.SqlServer.csproj" />
   </ItemGroup>
 
   <!-- Exclude appsettings.json from the package to avoid conflicts -->
