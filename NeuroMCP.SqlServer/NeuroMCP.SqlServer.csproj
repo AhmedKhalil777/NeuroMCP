@@ -13,7 +13,7 @@
     
     <!-- Package metadata -->
     <PackageId>NeuroMCP.SqlServer</PackageId>
-    <Version>1.1.5</Version>
+    <Version>1.1.6</Version>
     <Authors>Ahmed Khalil</Authors>
     <Description>NeuroMCP SQL Server Tool for interacting with MSSQL databases</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
