@@ -35,17 +35,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <!-- Azure DevOps specific packages -->
-    <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.205.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="16.205.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Services.InteractiveClient" Version="16.205.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Services.Identity" Version="16.205.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Services.Search.Client" Version="16.205.1" />
-    <PackageReference Include="Microsoft.TeamFoundation.DistributedTask.WebApi" Version="16.205.1" />
-    <PackageReference Include="Microsoft.TeamFoundation.Core.WebApi" Version="16.205.1" />
-    <PackageReference Include="Microsoft.TeamFoundation.WorkItemTracking.WebApi" Version="16.205.1" />
-    <PackageReference Include="Microsoft.TeamFoundation.SourceControl.WebApi" Version="16.205.1" />
-    <PackageReference Include="Microsoft.TeamFoundation.ProcessConfiguration.WebApi" Version="16.205.1" />
-    <PackageReference Include="Microsoft.TeamFoundation.Work.WebApi" Version="16.205.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="19.225.1" />
+    <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="19.225.1" />
     <PackageReference Include="Azure.Identity" Version="1.11.4" />
   </ItemGroup>
 

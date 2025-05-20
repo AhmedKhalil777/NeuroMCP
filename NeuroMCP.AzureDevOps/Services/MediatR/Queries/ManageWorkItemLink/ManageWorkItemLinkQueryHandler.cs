@@ -152,4 +152,4 @@ public class ManageWorkItemLinkQueryHandler : AzureDevOpsRequestHandler<ManageWo
             throw;
         }
     }
-} 
+}
