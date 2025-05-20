@@ -25,5 +25,19 @@ namespace NeuroMCP.AzureDevOps.Models
         /// Gets or sets the email of the account
         /// </summary>
         public string? Email { get; set; }
+
+        /// <summary>
+        /// Gets or sets the email address of the account (alias for Email)
+        /// </summary>
+        public string? EmailAddress
+        {
+            get => Email;
+            set => Email = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the URL of the account
+        /// </summary>
+        public string? Url { get; set; }
     }
 }

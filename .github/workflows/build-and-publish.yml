@@ -96,7 +96,7 @@ jobs:
     - name: Pack SQL Server package
       if: env.BUILD_SQL == 'true'
       run: dotnet pack NeuroMCP.SqlServer/NeuroMCP.SqlServer.csproj --configuration Release --no-build --output ./nupkg
-    
+      
     # Azure DevOps Package
     - name: Update version in Azure DevOps project
       if: env.BUILD_AZURE == 'true'

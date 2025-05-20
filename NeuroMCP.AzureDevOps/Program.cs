@@ -6,8 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using ModelContextProtocol.Server;
-using ModelContextProtocol.Services;
 using NeuroMCP.AzureDevOps.Models;
 using NeuroMCP.AzureDevOps.Services;
 
@@ -77,14 +75,8 @@ async Task RunServer(string[] args, int port)
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "NeuroMCP Azure DevOps API", Version = "v1" });
     });
 
-    // Add MCP Server
-    builder.Services.AddMcpServer(options =>
-    {
-        options.Name = "NeuroMCP.AzureDevOps";
-    });
-
-    // Add Azure DevOps services
-    builder.Services.AddSingleton<IAzureDevOpsService, AzureDevOpsService>();
+    // Add Azure DevOps services using the extension method
+    builder.Services.AddAzureDevOpsServices();
 
     // Configure HTTP
     builder.WebHost.ConfigureKestrel(options =>
@@ -103,9 +95,6 @@ async Task RunServer(string[] args, int port)
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
-
-    // Use MCP Server Middleware
-    app.UseMcpServer();
 
     Console.WriteLine($"NeuroMCP Azure DevOps server listening on port {port}");
 
