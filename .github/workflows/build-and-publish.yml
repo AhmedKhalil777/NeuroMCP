@@ -1,4 +1,4 @@
-name: Build and Publish NuGet Package
+name: Build and Publish NuGet Packages
 
 on:
   push:
@@ -19,9 +19,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: NeuroMCP.SqlServer
 
     steps:
     - uses: actions/checkout@v4
@@ -33,43 +30,104 @@ jobs:
       with:
         dotnet-version: '8.0.x'
     
-    - name: Determine version
+    - name: Determine version and packages to build
       id: determine_version
       run: |
         if [[ $GITHUB_REF == refs/tags/v* ]]; then
           # For tags, use the tag name without the 'v' prefix
           VERSION=${GITHUB_REF#refs/tags/v}
+          
+          # Determine which packages to build based on tag name
+          BUILD_SQL=false
+          BUILD_AZURE=false
+          
+          # Default to building both if no specific tag
+          if [[ $GITHUB_REF != *SQL* && $GITHUB_REF != *Azure* ]]; then
+            BUILD_SQL=true
+            BUILD_AZURE=true
+          fi
+          
+          # Build SQL package if tag contains SQL
+          if [[ $GITHUB_REF == *SQL* ]]; then
+            BUILD_SQL=true
+          fi
+          
+          # Build Azure package if tag contains Azure
+          if [[ $GITHUB_REF == *Azure* ]]; then
+            BUILD_AZURE=true
+          fi
         else
           # For branches, use a version based on date and commit count
+          # and build both packages
           COMMIT_COUNT=$(git rev-list --count HEAD)
           DATE=$(date '+%Y%m%d')
           VERSION="1.0.0-dev.$DATE.$COMMIT_COUNT"
+          BUILD_SQL=true
+          BUILD_AZURE=true
         fi
+        
         echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "BUILD_SQL=$BUILD_SQL" >> $GITHUB_ENV
+        echo "BUILD_AZURE=$BUILD_AZURE" >> $GITHUB_ENV
         echo "Determined version: $VERSION"
+        echo "Build SQL package: $BUILD_SQL"
+        echo "Build Azure package: $BUILD_AZURE"
     
-    - name: Update version in project
+    # SQL Server Package
+    - name: Update version in SQL Server project
+      if: env.BUILD_SQL == 'true'
+      working-directory: NeuroMCP.SqlServer
       run: |
         chmod +x ./Scripts/update-version.sh
         ./Scripts/update-version.sh ${{ env.VERSION }}
         
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Restore SQL Server dependencies
+      if: env.BUILD_SQL == 'true'
+      run: dotnet restore NeuroMCP.SqlServer/NeuroMCP.SqlServer.csproj
       
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
+    - name: Build SQL Server package
+      if: env.BUILD_SQL == 'true'
+      run: dotnet build NeuroMCP.SqlServer/NeuroMCP.SqlServer.csproj --configuration Release --no-restore
       
-    - name: Test
-      run: dotnet test --configuration Release --no-build --verbosity normal
+    - name: Test SQL Server package
+      if: env.BUILD_SQL == 'true'
+      run: dotnet test NeuroMCP.SqlServer/NeuroMCP.SqlServer.csproj --configuration Release --no-build --verbosity normal
       
-    - name: Pack
-      run: dotnet pack --configuration Release --no-build --output ./nupkg
+    - name: Pack SQL Server package
+      if: env.BUILD_SQL == 'true'
+      run: dotnet pack NeuroMCP.SqlServer/NeuroMCP.SqlServer.csproj --configuration Release --no-build --output ./nupkg
+    
+    # Azure DevOps Package
+    - name: Update version in Azure DevOps project
+      if: env.BUILD_AZURE == 'true'
+      working-directory: NeuroMCP.AzureDevOps
+      run: |
+        if [ -f ./Scripts/update-version.sh ]; then
+          chmod +x ./Scripts/update-version.sh
+          ./Scripts/update-version.sh ${{ env.VERSION }}
+        fi
+        
+    - name: Restore Azure DevOps dependencies
+      if: env.BUILD_AZURE == 'true'
+      run: dotnet restore NeuroMCP.AzureDevOps/NeuroMCP.AzureDevOps.csproj
       
-    - name: Upload NuGet package as artifact
+    - name: Build Azure DevOps package
+      if: env.BUILD_AZURE == 'true'
+      run: dotnet build NeuroMCP.AzureDevOps/NeuroMCP.AzureDevOps.csproj --configuration Release --no-restore
+      
+    - name: Test Azure DevOps package
+      if: env.BUILD_AZURE == 'true'
+      run: dotnet test NeuroMCP.AzureDevOps/NeuroMCP.AzureDevOps.csproj --configuration Release --no-build --verbosity normal
+      
+    - name: Pack Azure DevOps package
+      if: env.BUILD_AZURE == 'true'
+      run: dotnet pack NeuroMCP.AzureDevOps/NeuroMCP.AzureDevOps.csproj --configuration Release --no-build --output ./nupkg
+      
+    - name: Upload NuGet packages as artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: nuget-package
-        path: NeuroMCP.SqlServer/nupkg/*.nupkg
+        name: nuget-packages
+        path: ./nupkg/*.nupkg
 
   publish:
     needs: build
@@ -79,16 +137,49 @@ jobs:
       contents: write  # Needed for creating releases
       
     steps:
-    - name: Download NuGet package
+    - name: Set tag name
+      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      
+    - name: Download NuGet packages
       uses: actions/download-artifact@v4
       with:
-        name: nuget-package
+        name: nuget-packages
         path: ./nupkg
         
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
+        
+    - name: Determine package content
+      id: package_content
+      run: |
+        PACKAGES=""
+        PACKAGE_LIST=""
+        INSTALL_INSTRUCTIONS=""
+        
+        if ls ./nupkg/NeuroMCP.SqlServer.*.nupkg 1> /dev/null 2>&1; then
+          PACKAGES="${PACKAGES}SQL "
+          PACKAGE_LIST="${PACKAGE_LIST}- NeuroMCP.SqlServer v${TAG_NAME#v}\n"
+          INSTALL_INSTRUCTIONS="${INSTALL_INSTRUCTIONS}# SQL Server package\ndotnet tool install --global NeuroMCP.SqlServer --version ${TAG_NAME#v}\n\n"
+        fi
+        
+        if ls ./nupkg/NeuroMCP.AzureDevOps.*.nupkg 1> /dev/null 2>&1; then
+          PACKAGES="${PACKAGES}Azure "
+          PACKAGE_LIST="${PACKAGE_LIST}- NeuroMCP.AzureDevOps v${TAG_NAME#v}\n"
+          INSTALL_INSTRUCTIONS="${INSTALL_INSTRUCTIONS}# Azure DevOps package\ndotnet tool install --global NeuroMCP.AzureDevOps --version ${TAG_NAME#v}\n"
+        fi
+        
+        echo "PACKAGES=${PACKAGES}" >> $GITHUB_ENV
+        echo "PACKAGE_LIST<<EOF" >> $GITHUB_ENV
+        echo -e "${PACKAGE_LIST}" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+        
+        echo "INSTALL_INSTRUCTIONS<<EOF" >> $GITHUB_ENV
+        echo -e "${INSTALL_INSTRUCTIONS}" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+        
+        echo "Packages to publish: ${PACKAGES}"
         
     - name: Publish to NuGet
       run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
@@ -97,6 +188,18 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: ./nupkg/*.nupkg
-        generate_release_notes: true
+        name: Release ${{ env.TAG_NAME }} (${{ env.PACKAGES }})
+        body: |
+          # NeuroMCP ${{ env.TAG_NAME }}
+          
+          This release includes:
+          
+          ${{ env.PACKAGE_LIST }}
+          
+          ## Installation
+          
+          ```bash
+          ${{ env.INSTALL_INSTRUCTIONS }}
+          ```
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

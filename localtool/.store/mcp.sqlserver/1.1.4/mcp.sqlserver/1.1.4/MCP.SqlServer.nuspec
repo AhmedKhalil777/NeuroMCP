@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>MCP.SqlServer</id>
+    <version>1.1.4</version>
+    <authors>Ahmed Khalil</authors>
+    <readme>README.md</readme>
+    <description>MCP SQL Server Tool for interacting with MSSQL databases</description>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+    <repository type="git" commit="89187fc06b85fc72e63cc4523c161139ef61c199" />
+    <frameworkReferences>
+      <group targetFramework="net8.0">
+        <frameworkReference name="Microsoft.AspNetCore.App" />
+      </group>
+    </frameworkReferences>
+    <contentFiles>
+      <files include="any/net8.0/appsettings.Development.json" buildAction="Content" />
+      <files include="any/net8.0/appsettings.json" buildAction="Content" />
+      <files include="any/net8.0/mcp.json" buildAction="Content" />
+    </contentFiles>
+  </metadata>
+</package>
