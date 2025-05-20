@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: MCP.SqlServer
+        working-directory: NeuroMCP.SqlServer
 
     steps:
     - uses: actions/checkout@v4
@@ -69,7 +69,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: nuget-package
-        path: MCP.SqlServer/nupkg/*.nupkg
+        path: NeuroMCP.SqlServer/nupkg/*.nupkg
 
   publish:
     needs: build
