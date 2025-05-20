@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "MCP SQL Server",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/MCP.SqlServer/bin/Debug/net8.0/MCP.SqlServer.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/MCP.SqlServer",
+            "stopAtEntry": false,
+            "console": "externalTerminal",
+            "env": {
+                "DOTNET_ENVIRONMENT": "Development",
+                "MSSQL_SERVER": "your-server-name",
+                "MSSQL_DATABASE": "your-database-name",
+                "MSSQL_USER": "your-username",
+                "MSSQL_PASSWORD": "your-password"
+            }
+        }
+    ]
+}

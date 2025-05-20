@@ -399,3 +399,17 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Build results
+*.exe
+*.dll
+*.pdb
+
+# MSBuild Binary and Structured Log
+*.binlog
+
+# NuGet Symbol Packages
+*.snupkg
+
+# Specific to NeuroMCP
+mcp.json

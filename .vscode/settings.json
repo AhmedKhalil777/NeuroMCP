@@ -1,0 +1,12 @@
+{
+  "cursor.showCallouts": true,
+  "cursor.enableServerEverywhere": true,
+  "cursor.features.mcpEnabled": true,
+  "cursor.features.copilotSuggestionsEnabled": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true
+  }
+} 

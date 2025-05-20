@@ -1,0 +1,6 @@
+@MCP.SqlServer_HostAddress = http://localhost:5115
+
+GET {{MCP.SqlServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
