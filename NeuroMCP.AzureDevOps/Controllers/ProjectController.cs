@@ -4,8 +4,6 @@ using Microsoft.TeamFoundation.Core.WebApi;
 using NeuroMCP.AzureDevOps.Services.MediatR.Queries.GetProject;
 using NeuroMCP.AzureDevOps.Services.MediatR.Queries.GetProjectDetails;
 using NeuroMCP.AzureDevOps.Services.MediatR.Queries.ListProjects;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace NeuroMCP.AzureDevOps.Controllers;
 

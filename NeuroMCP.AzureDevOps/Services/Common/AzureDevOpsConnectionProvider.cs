@@ -1,16 +1,13 @@
 using Azure.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.Services.Client;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
-using NeuroMCP.AzureDevOps.Models;
 using System.Collections.Concurrent;
 
 namespace NeuroMCP.AzureDevOps.Services.Common;
 
 /// <summary>
-/// Provides connections to Azure DevOps
+/// Provides connections to Azure DevOps0
 /// </summary>
 public class AzureDevOpsConnectionProvider : IAzureDevOpsConnectionProvider
 {

@@ -1,12 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NeuroMCP.AzureDevOps.Services.MediatR.Models.Mapping;
-using NeuroMCP.AzureDevOps.Services.MediatR.Models.Queries;
-using NeuroMCP.AzureDevOps.Services.MediatR.Queries.SearchCode;
-using NeuroMCP.AzureDevOps.Services.MediatR.Queries.SearchWiki;
-using NeuroMCP.AzureDevOps.Services.MediatR.Queries.SearchWorkItems;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using NeuroMCP.AzureDevOps.Services.Common.Models.Queries;
+using NeuroMCP.AzureDevOps.Services.Queries.SearchWorkItems;
 
 namespace NeuroMCP.AzureDevOps.Controllers;
 
@@ -25,73 +20,34 @@ public class SearchController : ControllerBase
     /// Search for code across repositories
     /// </summary>
     [HttpGet("code")]
-    public async Task<ActionResult<SearchCodeResult>> SearchCodeAsync(
+    public async Task<ActionResult> SearchCodeAsync(
         [FromQuery] string searchText,
         [FromQuery] string? projectId = null,
-        [FromQuery] int skip = 0,
-        [FromQuery] int top = 100,
+        [FromQuery] int? skip = null,
+        [FromQuery] int? top = null,
         [FromQuery] string? organizationId = null)
     {
-        var model = new SearchCodeModel
+        // Temporarily comment out until we have the SearchCode query implemented
+        /*
+        var query = new SearchCodeQuery
         {
-            SearchText = searchText,
+            Model = new SearchCodeModel
+            {
+                SearchText = searchText,
+                Skip = skip,
+                Top = top
+            },
             ProjectId = projectId,
-            Skip = skip,
-            Top = top,
             OrganizationId = organizationId
         };
 
-        var result = await _mediator.Send(model.ToQuery());
+        var result = await _mediator.Send(query);
         return Ok(result);
+        */
+        return NotFound("Search code functionality is not implemented yet");
     }
 
-    /// <summary>
-    /// Search for code with advanced filtering
-    /// </summary>
-    [HttpPost("code")]
-    public async Task<ActionResult<SearchCodeResult>> SearchCodeWithFiltersAsync(
-        [FromBody] SearchCodeModel model)
-    {
-        var result = await _mediator.Send(model.ToQuery());
-        return Ok(result);
-    }
 
-    /// <summary>
-    /// Search for content across wiki pages
-    /// </summary>
-    [HttpGet("wiki")]
-    public async Task<ActionResult<SearchWikiResult>> SearchWikiAsync(
-        [FromQuery] string searchText,
-        [FromQuery] string? projectId = null,
-        [FromQuery] int skip = 0,
-        [FromQuery] int top = 100,
-        [FromQuery] bool includeFacets = true,
-        [FromQuery] string? organizationId = null)
-    {
-        var model = new SearchWikiModel
-        {
-            SearchText = searchText,
-            ProjectId = projectId,
-            Skip = skip,
-            Top = top,
-            IncludeFacets = includeFacets,
-            OrganizationId = organizationId
-        };
-
-        var result = await _mediator.Send(model.ToQuery());
-        return Ok(result);
-    }
-
-    /// <summary>
-    /// Search for wiki content with advanced filtering
-    /// </summary>
-    [HttpPost("wiki")]
-    public async Task<ActionResult<SearchWikiResult>> SearchWikiWithFiltersAsync(
-        [FromBody] SearchWikiModel model)
-    {
-        var result = await _mediator.Send(model.ToQuery());
-        return Ok(result);
-    }
 
     /// <summary>
     /// Search for work items
@@ -100,33 +56,27 @@ public class SearchController : ControllerBase
     public async Task<ActionResult<SearchWorkItemsResult>> SearchWorkItemsAsync(
         [FromQuery] string searchText,
         [FromQuery] string? projectId = null,
-        [FromQuery] int skip = 0,
-        [FromQuery] int top = 100,
-        [FromQuery] bool includeFacets = true,
+        [FromQuery] int? skip = null,
+        [FromQuery] int? top = null,
+        [FromQuery] bool? includeFacets = null,
         [FromQuery] string? organizationId = null)
     {
-        var model = new SearchWorkItemsModel
+        var query = new SearchWorkItemsQuery
         {
-            SearchText = searchText,
+            Model = new SearchWorkItemsModel
+            {
+                SearchText = searchText,
+                Skip = skip,
+                Top = top,
+                IncludeFacets = includeFacets ?? false
+            },
             ProjectId = projectId,
-            Skip = skip,
-            Top = top,
-            IncludeFacets = includeFacets,
             OrganizationId = organizationId
         };
 
-        var result = await _mediator.Send(model.ToQuery());
+        var result = await _mediator.Send(query);
         return Ok(result);
     }
 
-    /// <summary>
-    /// Search for work items with advanced filtering
-    /// </summary>
-    [HttpPost("workitems")]
-    public async Task<ActionResult<SearchWorkItemsResult>> SearchWorkItemsWithFiltersAsync(
-        [FromBody] SearchWorkItemsModel model)
-    {
-        var result = await _mediator.Send(model.ToQuery());
-        return Ok(result);
-    }
+
 }

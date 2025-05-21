@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.TeamFoundation.Wiki.WebApi;
+using Microsoft.TeamFoundation.Wiki.WebApi.Contracts;
 using NeuroMCP.AzureDevOps.Services.Common;
+using System.IO;
 
 namespace NeuroMCP.AzureDevOps.Services.Queries;
 
@@ -64,7 +66,6 @@ public class SearchWikiQuery : IQuery<object>
                     new WikiPagesBatchRequest
                     {
                         Top = 100, // Get a reasonable number of pages
-                        IncludeContent = true
                     },
                     wiki.Id,
                     projectName);
@@ -72,33 +73,51 @@ public class SearchWikiQuery : IQuery<object>
                 // For each page, search for the text
                 foreach (var page in pages)
                 {
-                    // Skip if no content
-                    if (string.IsNullOrEmpty(page.Content))
-                        continue;
-
-                    // Check if the page contains the search text
-                    if (page.Content.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                    try
                     {
-                        // Extract a small snippet around the match
-                        var contentPreview = ExtractContentSnippet(page.Content, _searchText);
+                        // Get the page content using the wiki client
+                        var contentStream = await wikiClient.GetPageTextAsync(wiki.Id, page.Path, projectName);
 
-                        // Create a result object
-                        results.Add(new
+                        // Read the stream into a string
+                        string pageContent;
+                        using (var reader = new StreamReader(contentStream))
                         {
-                            WikiName = wiki.Name,
-                            WikiId = wiki.Id,
-                            PageName = page.Path.Split('/').Last(),
-                            Path = page.Path,
-                            ProjectName = projectName,
-                            Content = contentPreview,
-                            Url = $"{connection.Uri}/{projectName}/_wiki/wikis/{wiki.Name}/{page.Path}"
-                        });
+                            pageContent = await reader.ReadToEndAsync();
+                        }
 
-                        totalMatchCount++;
+                        // Skip if no content
+                        if (string.IsNullOrEmpty(pageContent))
+                            continue;
 
-                        // Respect the top parameter
-                        if (results.Count >= _top)
-                            break;
+                        // Check if the page contains the search text
+                        if (pageContent.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            // Extract a small snippet around the match
+                            var contentPreview = ExtractContentSnippet(pageContent, _searchText);
+
+                            // Create a result object
+                            results.Add(new
+                            {
+                                WikiName = wiki.Name,
+                                WikiId = wiki.Id,
+                                PageName = page.Path.Split('/').Last(),
+                                Path = page.Path,
+                                ProjectName = projectName,
+                                Content = contentPreview,
+                                Url = $"{connection.Uri}/{projectName}/_wiki/wikis/{wiki.Name}/{page.Path}"
+                            });
+
+                            totalMatchCount++;
+
+                            // Respect the top parameter
+                            if (results.Count >= _top)
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Error retrieving content for wiki page {WikiId}/{Path}", wiki.Id, page.Path);
+                        continue;
                     }
                 }
 

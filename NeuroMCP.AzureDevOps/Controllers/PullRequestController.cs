@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
-using NeuroMCP.AzureDevOps.Services.MediatR.Commands.CreatePullRequest;
+using NeuroMCP.AzureDevOps.Services.Commands.CreatePullRequest;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

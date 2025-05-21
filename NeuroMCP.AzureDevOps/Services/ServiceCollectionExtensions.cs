@@ -16,8 +16,6 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddAzureDevOpsServices(this IServiceCollection services)
     {
-        // Register legacy service (for backward compatibility)
-        services.AddSingleton<IAzureDevOpsService, AzureDevOpsService>();
 
         // Register common services
         services.AddSingleton<IAzureDevOpsConnectionProvider, AzureDevOpsConnectionProvider>();
@@ -28,9 +26,6 @@ public static class ServiceCollectionExtensions
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
 
-        // Register legacy CQRS factory services (for backward compatibility)
-        services.AddSingleton<ICommandFactory, CommandFactory>();
-        services.AddSingleton<IQueryFactory, QueryFactory>();
 
         return services;
     }
