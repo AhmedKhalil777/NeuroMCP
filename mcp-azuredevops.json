@@ -1,0 +1,10 @@
+{
+  "azureDevOps": {
+    "orgUrl": "https://dev.azure.com/your-org",
+    "defaultProject": "YourProject",
+    "authentication": {
+      "type": "pat",
+      "patToken": "your-pat-token"
+    }
+  }
+} 

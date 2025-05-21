@@ -86,11 +86,9 @@ async Task RunServer(string[] args, int port)
 
     var app = builder.Build();
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    // Enable Swagger in all environments, not just Development
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     app.UseHttpsRedirection();
     app.UseAuthorization();
