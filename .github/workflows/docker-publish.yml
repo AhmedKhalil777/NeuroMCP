@@ -51,6 +51,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           
+      - name: Update Docker Hub description for AzureDevOps
+        if: github.event_name != 'pull_request'
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/neuromcp-azuredevops
+          short-description: "NeuroMCP server for Azure DevOps integration via MCP protocol"
+          readme-filepath: ./NeuroMCP.AzureDevOps/DOCKERHUB.md
+          
   publish-sqlserver:
     runs-on: ubuntu-latest
     permissions:
@@ -92,4 +102,14 @@ jobs:
           tags: ${{ steps.meta-sqlserver.outputs.tags }}
           labels: ${{ steps.meta-sqlserver.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max 
+          cache-to: type=gha,mode=max
+          
+      - name: Update Docker Hub description for SQL Server
+        if: github.event_name != 'pull_request'
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/neuromcp-sqlserver
+          short-description: "NeuroMCP server for SQL Server integration via MCP protocol"
+          readme-filepath: ./NeuroMCP.SqlServer/DOCKERHUB.md 
