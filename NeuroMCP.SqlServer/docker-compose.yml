@@ -6,18 +6,15 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:80"
-      - "5001:443"
+      - "5200:5200"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-      - DOTNET_RUNNING_IN_CONTAINER=true
-      - MSSQL_SERVER=your-server-name
-      - MSSQL_DATABASE=your-database-name
-      - MSSQL_USER=your-username
-      - MSSQL_PASSWORD=your-password
+      - ASPNETCORE_ENVIRONMENT=Development
+      # Database connection settings
+      - DB_SERVER=your-server-name
+      - DB_NAME=your-database-name
+      - DB_USER=your-username
+      - DB_PASSWORD=your-password
+      - DB_TRUST_SERVER_CERTIFICATE=true
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-    labels:
-      - "com.microsoft.dotnet.version=8.0" 
+      - ./config:/app/config
+    restart: unless-stopped 

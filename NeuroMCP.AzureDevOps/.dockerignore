@@ -1,0 +1,46 @@
+# Git
+.git
+.gitignore
+
+# Development Directories
+.vs/
+.vscode/
+bin/
+obj/
+node_modules/
+temp/
+localtool/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# NuGet packages
+*.nupkg
+packages/*
+!packages/build/
+nupkg/
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Other
+.DS_Store
+*.dbmdl
+*.jfm 
