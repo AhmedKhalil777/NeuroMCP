@@ -1,0 +1,177 @@
+/* Global Styles */
+:root {
+    --primary-color: #4e73df;
+    --secondary-color: #2e59d9;
+    --dark-color: #2c3e50;
+    --light-color: #f8f9fc;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Hero section */
+.hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 4rem 0;
+}
+
+/* Doc header */
+.doc-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 2rem 0;
+}
+
+/* Cards */
+.feature-card {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Service logos */
+.service-logo {
+    width: 120px;
+    height: auto;
+    margin: 0 auto 1rem;
+    display: block;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+/* Footer */
+footer {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+
+/* Code blocks */
+pre {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+code {
+    color: #e83e8c;
+}
+
+/* Tables */
+.table {
+    margin-bottom: 2rem;
+}
+
+/* Markdown content */
+.markdown-content {
+    line-height: 1.7;
+}
+
+.markdown-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1rem auto;
+}
+
+.markdown-content h1,
+.markdown-content h2 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.markdown-content h3,
+.markdown-content h4 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.markdown-content table {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    border-collapse: collapse;
+}
+
+.markdown-content table th,
+.markdown-content table td {
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+}
+
+.markdown-content table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.markdown-content blockquote {
+    padding: 1rem;
+    border-left: 4px solid var(--primary-color);
+    background-color: #f8f9fa;
+    margin: 1rem 0;
+}
+
+.markdown-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.markdown-content a:hover {
+    text-decoration: underline;
+    color: var(--secondary-color);
+}
+
+.markdown-content pre {
+    margin-bottom: 1.5rem;
+}
+
+/* Table of Contents */
+.toc {
+    position: sticky;
+    top: 2rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+}
+
+.toc ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.toc li {
+    margin-bottom: 0.5rem;
+}
+
+.toc a {
+    color: #333;
+    text-decoration: none;
+}
+
+.toc a:hover {
+    color: var(--primary-color);
+}
+
+/* Add padding to sections */
+section {
+    padding: 2rem 0;
+}

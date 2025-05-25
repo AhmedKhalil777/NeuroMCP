@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroMCP.SqlServer - Documentation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #2e59d9;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .doc-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem 0;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+
+        code {
+            color: #e83e8c;
+        }
+
+        .table {
+            margin-bottom: 2rem;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">NeuroMCP</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html#services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#getting-started">Getting Started</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#documentation">Documentation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://github.com/ahmedkhaled/NeuroMCP"
+                            target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="doc-header text-center">
+        <div class="container">
+            <img src="images/sqlserver-logo.png" alt="SQL Server Logo" style="width: 120px; margin-bottom: 1rem;">
+            <h1 class="display-5 fw-bold">NeuroMCP.SqlServer</h1>
+            <p class="lead">A Model Context Protocol (MCP) server for interacting with Microsoft SQL Server databases
+            </p>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-9">
+                <!-- Introduction -->
+                <section class="mb-5">
+                    <p class="lead">
+                        NeuroMCP.SqlServer provides a standardized API that allows AI agents to execute SQL queries,
+                        explore database schemas, and perform database operations.
+                    </p>
+                </section>
+
+                <!-- Features -->
+                <section class="mb-5">
+                    <h2>Features</h2>
+                    <ul>
+                        <li><strong>SQL Query Execution</strong>: Run SQL queries with parameters</li>
+                        <li><strong>Connection Management</strong>: Test and manage database connections</li>
+                        <li><strong>Schema Exploration</strong>: Explore database tables and schema information</li>
+                        <li><strong>Query Parameterization</strong>: Support for parameterized queries for security</li>
+                        <li><strong>Transaction Support</strong>: Execute queries within transactions</li>
+                        <li><strong>Error Handling</strong>: Robust error handling and reporting</li>
+                    </ul>
+                </section>
+
+                <!-- Installation -->
+                <section class="mb-5">
+                    <h2>Installation</h2>
+
+                    <h3>Docker Installation</h3>
+                    <p>The easiest way to run NeuroMCP.SqlServer is using Docker:</p>
+                    <pre><code>docker pull ahmedkhalil777/neuromcp-sqlserver:latest
+docker run -p 5200:5200 ahmedkhalil777/neuromcp-sqlserver</code></pre>
+                    <p>For more details, see the <a href="docker-installation.html">Docker Installation</a> guide.</p>
+
+                    <h3>Local Installation</h3>
+                    <p>To install NeuroMCP.SqlServer as a .NET tool:</p>
+                    <pre><code>dotnet tool install --global NeuroMCP.SqlServer
+neuromcp-mssql --port 5200</code></pre>
+                    <p>For more details, see the <a href="local-installation.html">Local Installation</a> guide.</p>
+                </section>
+
+                <!-- Configuration -->
+                <section class="mb-5">
+                    <h2>Configuration</h2>
+                    <h3>SQL Server Connection</h3>
+                    <p>NeuroMCP.SqlServer requires SQL Server connection details. You can provide these through an
+                        <code>appsettings.json</code> file:</p>
+                    <pre><code>{
+  "Database": {
+    "Server": "your-sql-server",
+    "Database": "your-database",
+    "UserId": "your-username",
+    "Password": "your-password",
+    "TrustServerCertificate": true,
+    "ApplicationName": "NeuroMCP.SqlServer",
+    "ConnectionTimeout": 30
+  }
+}</code></pre>
+
+                    <p>You can also use connection strings directly:</p>
+                    <pre><code>{
+  "ConnectionStrings": {
+    "SqlServer": "Server=localhost;Database=master;User Id=sa;Password=Password123;TrustServerCertificate=True;"
+  }
+}</code></pre>
+                    <p>For more detailed configuration options, see the <a href="sqlserver-configuration.html">SQL
+                            Server Configuration</a> guide.</p>
+                </section>
+
+                <!-- API Reference -->
+                <section class="mb-5">
+                    <h2>API Reference</h2>
+                    <p>NeuroMCP.SqlServer implements the Model Context Protocol (MCP) and provides the following tools:
+                    </p>
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Tool Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>SIT-MSSQL_GetConnectionInfo</code></td>
+                                <td>Get information about the current database connection</td>
+                            </tr>
+                            <tr>
+                                <td><code>SIT-MSSQL_ExecuteSql</code></td>
+                                <td>Execute an SQL query with optional parameters</td>
+                            </tr>
+                            <tr>
+                                <td><code>SIT-MSSQL_TestConnection</code></td>
+                                <td>Test a database connection with provided configuration</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>For more details on each tool, see the <a href="sqlserver-api-reference.html">SQL Server API
+                            Reference</a>.</p>
+                </section>
+
+                <!-- Examples -->
+                <section class="mb-5">
+                    <h2>Examples</h2>
+                    <h3>Executing an SQL Query</h3>
+                    <pre><code>{
+  "method": "SIT-MSSQL_ExecuteSql",
+  "params": {
+    "query": "SELECT * FROM Customers WHERE CustomerID = @CustomerID",
+    "parameters": {
+      "CustomerID": "ALFKI"
+    }
+  }
+}</code></pre>
+
+                    <h3>Testing a Connection</h3>
+                    <pre><code>{
+  "method": "SIT-MSSQL_TestConnection",
+  "params": {
+    "databaseConfig": {
+      "Server": "localhost",
+      "Database": "Northwind",
+      "UserId": "sa",
+      "Password": "Password123",
+      "TrustServerCertificate": true
+    }
+  }
+}</code></pre>
+                    <p>For more examples, see the <a href="sqlserver-examples.html">SQL Server Examples</a> guide.</p>
+                </section>
+
+                <!-- Security -->
+                <section class="mb-5">
+                    <h2>Security Considerations</h2>
+                    <ul>
+                        <li>Always use parameterized queries to prevent SQL injection</li>
+                        <li>Create database users with minimal required permissions</li>
+                        <li>Store connection credentials securely and never in source code</li>
+                        <li>Consider using environment variables or a secrets manager for password storage</li>
+                        <li>Use encryption for data in transit (TLS)</li>
+                    </ul>
+                    <p>For more security best practices, see the <a href="security.html">Security Best Practices</a>
+                        guide.</p>
+                </section>
+
+                <!-- Docker -->
+                <section class="mb-5">
+                    <h2>Docker Integration</h2>
+                    <p>NeuroMCP.SqlServer can be run alongside a SQL Server container:</p>
+                    <pre><code>version: '3.8'
+
+services:
+  neuromcp-sqlserver:
+    image: ahmedkhalil777/neuromcp-sqlserver:latest
+    ports:
+      - "5200:5200"
+    environment:
+      - DB_SERVER=sqlserver
+      - DB_NAME=master
+      - DB_USER=sa
+      - DB_PASSWORD=YourStrongPassword123
+      - DB_TRUST_SERVER_CERTIFICATE=true
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrongPassword123
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:</code></pre>
+                    <p>For more details, see the <a href="docker-compose.html">Docker Compose</a> guide.</p>
+                </section>
+
+                <!-- Troubleshooting -->
+                <section class="mb-5">
+                    <h2>Troubleshooting</h2>
+                    <p>Common issues and their solutions:</p>
+                    <ul>
+                        <li><strong>Connection Failures</strong>: Check server name, credentials, and network
+                            connectivity</li>
+                        <li><strong>Authentication Issues</strong>: Verify SQL Server authentication mode and
+                            credentials</li>
+                        <li><strong>Permission Errors</strong>: Ensure the database user has appropriate permissions
+                        </li>
+                        <li><strong>Query Timeouts</strong>: Check query complexity and server performance</li>
+                    </ul>
+                    <p>For more troubleshooting help, see the <a href="common-issues.html">Common Issues</a> guide.</p>
+                </section>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="card sticky-top" style="top: 2rem;">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">On This Page</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#installation">Installation</a></li>
+                            <li><a href="#configuration">Configuration</a></li>
+                            <li><a href="#api-reference">API Reference</a></li>
+                            <li><a href="#examples">Examples</a></li>
+                            <li><a href="#security-considerations">Security</a></li>
+                            <li><a href="#docker-integration">Docker Integration</a></li>
+                            <li><a href="#troubleshooting">Troubleshooting</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="container">
+            <div class="mb-4">
+                <a href="https://github.com/ahmedkhaled/NeuroMCP" class="text-white me-3" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://hub.docker.com/r/ahmedkhalil777/neuromcp-sqlserver" class="text-white me-3"
+                    target="_blank">
+                    <i class="fab fa-docker"></i> Docker Hub
+                </a>
+            </div>
+            <p>NeuroMCP is licensed under the MIT License</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
